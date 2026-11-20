@@ -1,0 +1,13 @@
+# Runs on Google Colab (T4 GPU). Versions used for the week-1 results:
+# torch 2.14.1, transformers 5.22.1, Python 3.13, ffmpeg 7.0.2 (static build with libopencore-amrnb)
+torch
+transformers>=4.40
+soundfile
+scipy
+numpy
+pandas
+matplotlib
+scikit-learn
+gdown
+webrtc-noise-gain
+# System tools: ffmpeg (with libopencore_amrnb, libopus, libgsm) and opus-tools (opusenc/opusdec)
