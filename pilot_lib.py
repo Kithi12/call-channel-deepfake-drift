@@ -96,7 +96,7 @@ def frame_loss(x, utt_id, rate, seed, frame=320, fade=40):
 # ----------------------------- conditions ---------------------------------
 def available_encoders(ffmpeg='ffmpeg'):
     out = subprocess.run([ffmpeg, '-hide_banner', '-encoders'], stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode()
-    return {name for name in ('libgsm', 'libopus', 'pcm_mulaw', 'libopencore_amrnb') if re.search(rf'\s{name}\s', out)}
+    return {name for name in ('libgsm', 'libopus', 'pcm_mulaw', 'libopencore_amrnb', 'libvo_amrwbenc') if re.search(rf'\s{name}\s', out)}
 
 
 def make_conditions(encoders, seed, ffmpeg='ffmpeg'):
@@ -376,6 +376,40 @@ def webrtc_apm(x, noise_suppression=2, auto_gain_dbfs=3):
     return np.concatenate([y, np.zeros(len(x) - len(y), np.float32)])
 
 
+def _coded(args, ext, sr, ffmpeg):
+    def fn(x, u):
+        y, lag = align_to(x, ffmpeg_roundtrip(x, args, sr, ext, ffmpeg))
+        return y, {'lag': lag}
+    return fn
+
+
+def frame_loss_ge(x, utt_id, mean_loss, mean_burst, seed, frame=320, fade=40):
+    """Bursty 20 ms frame loss from a two-state Gilbert-Elliott chain (seeded per utterance), with the
+    same repetition concealment as frame_loss. mean_loss = long-run loss rate, mean_burst = frames per burst."""
+    rng = np.random.default_rng((zlib.crc32(utt_id.encode()) ^ (seed + 7)) & 0xFFFFFFFF)
+    p_bg = 1.0 / mean_burst                       # bad -> good
+    p_gb = mean_loss * p_bg / (1 - mean_loss)     # good -> bad
+    n = len(x) // frame
+    lost, bad = np.zeros(n, bool), False
+    for i in range(n):
+        bad = (rng.random() < p_gb) if not bad else (rng.random() >= p_bg)
+        lost[i] = bad
+    lost[0] = False
+    y = x.copy(); ramp = np.linspace(0, 1, fade, dtype=np.float32); run = 0
+    for i in range(1, n):
+        s = i * frame
+        if lost[i]:
+            run += 1
+            seg = y[s - frame:s] * (0.7 ** run)
+            seg[:fade] = y[s - 1] * (1 - ramp) + seg[:fade] * ramp
+            y[s:s + frame] = seg
+        else:
+            if run:
+                y[s:s + fade] = y[s - fade:s] * (1 - ramp) + x[s:s + fade] * ramp
+            run = 0
+    return y, float(lost.mean())
+
+
 def make_conditions_v2(encoders, seed, ffmpeg='ffmpeg', ffmpeg_gsm=None, have_opus_tools=False, have_webrtc=False):
     """Week-2 stages. Returns {name: (description, fn(x, utt_id) -> (y, info))}.
     Shortcut controls (names with __rms / __trim) are added later, per damaging stage."""
@@ -402,6 +436,22 @@ def make_conditions_v2(encoders, seed, ffmpeg='ffmpeg', ffmpeg_gsm=None, have_op
             y, lag = align_to(x, webrtc_apm(x))
             return y, {'lag': lag}
         C['webrtc_only'] = ('WebRTC noise suppression + gain control only', apm)
+    if 'libopencore_amrnb' in encoders:                      # dose-response over AMR-NB rates
+        for r in ('5.9', '7.4'):
+            C[f"amrnb_{r.replace('.', 'k')}"] = (f'AMR-NB {r} kbit/s (mobile)', _coded(['-c:a', 'libopencore_amrnb', '-b:a', f'{r}k'], 'amr', 8000, ffmpeg))
+    if 'libvo_amrwbenc' in encoders:                         # wideband (HD voice / VoLTE)
+        for r in ('12.65', '23.85'):
+            C[f"amrwb_{r.replace('.', 'k')}"] = (f'AMR-WB {r} kbit/s (HD voice, 16 kHz)', _coded(['-c:a', 'libvo_amrwbenc', '-b:a', f'{r}k'], 'amr', 16000, ffmpeg))
+    if 'libopus' in encoders:                                # wideband VoIP, as WebRTC apps normally run
+        for r in (16, 24):
+            C[f'opus_wb_{r}k'] = (f'Opus wideband {r} kbit/s, VoIP mode', _coded(['-c:a', 'libopus', '-b:a', f'{r}k', '-application', 'voip'], 'opus', 16000, ffmpeg))
+    if 'g711u' in base:                                      # bursty (Gilbert-Elliott) loss, mean burst 3 frames
+        for m in (5, 10):
+            def ge(x, u, m=m):
+                y, info = base['g711u'][1](x, u)
+                y, lost = frame_loss_ge(y, u, m / 100, 3.0, seed)
+                return y, dict(info, lost=lost)
+            C[f'g711u_burst{m}'] = (f'G.711 with {m}% bursty frame loss (Gilbert-Elliott, mean burst 60 ms)', ge)
     if 'amrnb_12k2' in base:
         def chain(x, u):
             y, info = base['amrnb_12k2'][1](bandpass(x), u)
@@ -506,3 +556,36 @@ def speaker_split(speakers, seed=0):
     rng = np.random.default_rng(seed); rng.shuffle(sp)
     fit = set(sp[:len(sp) // 2])
     return np.array(['fit' if s in fit else 'test' for s in speakers])
+
+
+
+class LayerAffine:
+    """Context manager: replaces one layer's output h (every frame) by h @ A + b (label-free alignment)."""
+    def __init__(self, net, layer, A, b):
+        import torch
+        self.mod = xlsr_layers(net)[layer]
+        self.A = torch.as_tensor(np.asarray(A, np.float32)); self.b = torch.as_tensor(np.asarray(b, np.float32))
+        self.h = None
+    def __enter__(self):
+        def hook(m, i, o):
+            h = _hs(o)
+            return _replace(o, h @ self.A.to(h.device, h.dtype) + self.b.to(h.device, h.dtype))
+        self.h = self.mod.register_forward_hook(hook)
+        return self
+    def __exit__(self, *a):
+        self.h.remove()
+
+
+def coral_affine(src, tgt, reg=0.1):
+    """CORAL (Sun et al., 2016) as an affine map from the call-copy statistics (src) to the clean statistics
+    (tgt), both N x D utterance means from the fit half. Returns A (D x D) and b (D) with x' = x @ A + b.
+    reg = shrinkage towards the diagonal, since N is close to D."""
+    def shrink(C):
+        return (1 - reg) * C + reg * np.diag(np.diag(C)) + 1e-6 * np.eye(len(C))
+    def msqrt(C, inv=False):
+        w, V = np.linalg.eigh(C); w = np.clip(w, 1e-8, None)
+        return (V * (w ** (-0.5 if inv else 0.5))) @ V.T
+    ms, mt = src.mean(0), tgt.mean(0)
+    Cs, Ct = shrink(np.cov(src.T)), shrink(np.cov(tgt.T))
+    A = msqrt(Cs, inv=True) @ msqrt(Ct)
+    return A.astype(np.float32), (mt - ms @ A).astype(np.float32)
