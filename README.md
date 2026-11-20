@@ -35,8 +35,8 @@ The full table is in `results/week1/summary_week1.csv`.
 ```
 pilot_lib.py                        call-stage simulator, alignment, metrics, detector loaders, layer hooks
 notebooks/week1_pilot_ssl_aasist.ipynb   reproduction + 9 call stages, 2 checkpoints, threshold robustness
-notebooks/week2_shortcut_channels_inside.ipynb   shortcut controls, realistic channels, AASIST,
-                                    layer-wise drift and probes, training-free test-time correction
+notebooks/week2_inside_channels_shortcut.ipynb   layer-wise drift, training-free fix vs baselines,
+                                    realistic codecs (AMR-WB, Opus WB, rate sweep), AASIST, shortcut and floor checks
 results/                            summary tables (per-utterance scores, no audio)
 ```
 
