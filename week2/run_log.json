@@ -1,0 +1,69 @@
+{
+ "cfg": {
+  "SEED": 1234,
+  "BATCH": 16,
+  "OUT": "/content/drive/MyDrive/fyp_pilot",
+  "WORK": "/content/work",
+  "RUN_DETECTORS": [
+   "A"
+  ],
+  "INSIDE_CKPTS": [
+   "A"
+  ],
+  "INSIDE_LAYERS": [
+   5,
+   11,
+   17,
+   23
+  ],
+  "RESCORE_FOR_LLR": false,
+  "ELEVEN_DIR": "/content/drive/MyDrive/fyp_pilot/Fake_ElevenLabs_Respeecher"
+ },
+ "commits": {
+  "SSL_Anti-spoofing": "4acaa61dcef5f7610f43aa4d0b29c4559b970cd2",
+  "aasist": "a04c9863f63d44471dde8a6abcb3b082b07cd1d1"
+ },
+ "loads": {
+  "A": "{'xlsr_layers': 24, 'conv_bias': True, 'ssl_params_loaded': 421, 'ignored_pretraining_params': 8, 'backend_params_loaded': 245}"
+ },
+ "ffmpeg": "/content/ffs/ffmpeg",
+ "encoders": [
+  "libopencore_amrnb",
+  "libopus",
+  "libvo_amrwbenc",
+  "pcm_mulaw"
+ ],
+ "stages": [
+  "clean",
+  "clean_rms",
+  "bandpass_300_3400",
+  "nb_resample",
+  "g711u",
+  "g711u_loss10",
+  "amrnb_12k2",
+  "amrnb_4k75",
+  "opus_nb_8k",
+  "gsm_fr",
+  "opus_nb_8k_plc5",
+  "opus_nb_8k_plc10",
+  "opus_nb_8k_plc20",
+  "webrtc_amrnb_12k2",
+  "webrtc_only",
+  "amrnb_5k9",
+  "amrnb_7k4",
+  "amrwb_12k65",
+  "amrwb_23k85",
+  "opus_wb_16k",
+  "opus_wb_24k",
+  "g711u_burst5",
+  "g711u_burst10",
+  "chain_bp_amr12k2_loss5",
+  "clean_trim",
+  "g711u_loss10__rms",
+  "g711u_loss10__trim",
+  "amrnb_4k75__rms",
+  "amrnb_4k75__trim",
+  "opus_nb_8k__rms",
+  "opus_nb_8k__trim"
+ ]
+}

@@ -1,0 +1,340 @@
+### WEEK 2 SUMMARY (v2)
+run: 2026-11-22 11:03 | GPU: Tesla T4 | torch 2.14.1+cu130 | transformers 5.22.1 | python 3.13.16
+commits: {'SSL_Anti-spoofing': '4acaa61dcef5f7610f43aa4d0b29c4559b970cd2', 'aasist': 'a04c9863f63d44471dde8a6abcb3b082b07cd1d1'}
+ffmpeg: /content/ffs/ffmpeg enc: ['libopencore_amrnb', 'libopus', 'libvo_amrwbenc', 'pcm_mulaw'] opus-tools: True webrtc: True
+stages: ['clean', 'clean_rms', 'bandpass_300_3400', 'nb_resample', 'g711u', 'g711u_loss10', 'amrnb_12k2', 'amrnb_4k75', 'opus_nb_8k', 'gsm_fr', 'opus_nb_8k_plc5', 'opus_nb_8k_plc10', 'opus_nb_8k_plc20', 'webrtc_amrnb_12k2', 'webrtc_only', 'amrnb_5k9', 'amrnb_7k4', 'amrwb_12k65', 'amrwb_23k85', 'opus_wb_16k', 'opus_wb_24k', 'g711u_burst5', 'g711u_burst10', 'chain_bp_amr12k2_loss5', 'clean_trim', 'g711u_loss10__rms', 'g711u_loss10__trim', 'amrnb_4k75__rms', 'amrnb_4k75__trim', 'opus_nb_8k__rms', 'opus_nb_8k__trim']
+loads: {'A': {'xlsr_layers': 24, 'conv_bias': True, 'ssl_params_loaded': 421, 'ignored_pretraining_params': 8, 'backend_params_loaded': 245}}
+thresholds: {'A': {'dev_EER': -3.437, 'mid_gap': 0.172, 'fakes_1pct': -3.526}}
+
+## Inside: share of real->fake gap moved (genuine / fake) by layer
+||fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|fake_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves|genuine_moves
+layer||0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23
+ckpt|stage||||||||||||||||||||||||||||||||||||||||||||||||
+A|amrnb_4k75|-0.2|-0.19|-0.16|-0.11|-0.02|0.08|0.17|0.27|0.26|0.22|0.23|0.2|0.22|0.25|0.24|0.21|0.22|0.21|0.2|0.11|0.12|0.02|0.02|0.02|-0.12|-0.1|-0.05|0.0|0.11|0.23|0.48|0.67|0.68|0.7|0.71|0.72|0.73|0.75|0.75|0.79|0.82|0.85|0.89|0.9|0.94|1.07|1.03|1.03
+A|g711u_loss10|-0.05|-0.06|-0.04|-0.03|0.03|0.12|0.26|0.31|0.28|0.23|0.25|0.22|0.24|0.24|0.22|0.17|0.16|0.16|0.14|0.08|0.08|0.01|0.01|0.01|-0.03|-0.03|0.0|0.02|0.09|0.17|0.46|0.6|0.6|0.6|0.61|0.62|0.63|0.61|0.57|0.61|0.62|0.64|0.66|0.75|0.76|0.95|0.91|0.91
+A|opus_nb_8k|-0.11|-0.11|-0.09|-0.06|0.02|0.08|0.14|0.21|0.21|0.18|0.19|0.17|0.18|0.2|0.19|0.17|0.17|0.17|0.16|0.09|0.1|0.01|0.01|0.01|-0.05|-0.05|-0.01|0.02|0.1|0.15|0.27|0.34|0.34|0.35|0.35|0.36|0.37|0.37|0.36|0.4|0.41|0.42|0.44|0.53|0.55|0.77|0.72|0.69
+
+
+## Inside: probes by layer
+ckpt|stage|layer|auc_clean|auc_call_clean_probe|eer_call_clean_probe|auc_call_retrained
+A|g711u_loss10|0|0.997|0.978|0.072|0.995
+A|g711u_loss10|1|0.993|0.989|0.051|0.99
+A|g711u_loss10|2|0.996|0.993|0.039|0.996
+A|g711u_loss10|3|0.997|0.997|0.022|0.996
+A|g711u_loss10|4|0.999|0.999|0.015|0.997
+A|g711u_loss10|5|1.0|0.998|0.017|0.998
+A|g711u_loss10|6|1.0|0.994|0.037|0.999
+A|g711u_loss10|7|1.0|0.993|0.04|1.0
+A|g711u_loss10|8|1.0|0.996|0.03|1.0
+A|g711u_loss10|9|1.0|0.996|0.026|1.0
+A|g711u_loss10|10|1.0|0.995|0.026|1.0
+A|g711u_loss10|11|1.0|0.995|0.032|1.0
+A|g711u_loss10|12|1.0|0.996|0.032|1.0
+A|g711u_loss10|13|1.0|0.996|0.028|1.0
+A|g711u_loss10|14|1.0|0.995|0.035|1.0
+A|g711u_loss10|15|1.0|0.996|0.03|1.0
+A|g711u_loss10|16|1.0|0.994|0.032|1.0
+A|g711u_loss10|17|1.0|0.993|0.04|1.0
+A|g711u_loss10|18|1.0|0.994|0.042|1.0
+A|g711u_loss10|19|1.0|0.98|0.085|1.0
+A|g711u_loss10|20|1.0|0.993|0.046|1.0
+A|g711u_loss10|21|1.0|0.984|0.062|1.0
+A|g711u_loss10|22|1.0|0.827|0.267|1.0
+A|g711u_loss10|23|1.0|0.832|0.252|1.0
+A|amrnb_4k75|0|0.997|0.934|0.134|0.98
+A|amrnb_4k75|1|0.993|0.958|0.107|0.985
+A|amrnb_4k75|2|0.996|0.966|0.098|0.989
+A|amrnb_4k75|3|0.997|0.979|0.079|0.992
+A|amrnb_4k75|4|0.999|0.987|0.057|0.992
+A|amrnb_4k75|5|1.0|0.988|0.064|0.994
+A|amrnb_4k75|6|1.0|0.981|0.081|0.992
+A|amrnb_4k75|7|1.0|0.973|0.094|0.993
+A|amrnb_4k75|8|1.0|0.977|0.088|0.992
+A|amrnb_4k75|9|1.0|0.974|0.083|0.992
+A|amrnb_4k75|10|1.0|0.976|0.081|0.994
+A|amrnb_4k75|11|1.0|0.975|0.083|0.994
+A|amrnb_4k75|12|1.0|0.976|0.083|0.997
+A|amrnb_4k75|13|1.0|0.976|0.085|0.997
+A|amrnb_4k75|14|1.0|0.967|0.098|0.997
+A|amrnb_4k75|15|1.0|0.969|0.098|0.998
+A|amrnb_4k75|16|1.0|0.964|0.103|0.998
+A|amrnb_4k75|17|1.0|0.957|0.121|0.998
+A|amrnb_4k75|18|1.0|0.962|0.111|0.998
+A|amrnb_4k75|19|1.0|0.936|0.151|0.998
+A|amrnb_4k75|20|1.0|0.947|0.132|0.998
+A|amrnb_4k75|21|1.0|0.803|0.263|0.991
+A|amrnb_4k75|22|1.0|0.431|0.574|0.989
+A|amrnb_4k75|23|1.0|0.429|0.576|0.989
+A|opus_nb_8k|0|0.997|0.968|0.096|0.99
+A|opus_nb_8k|1|0.993|0.979|0.068|0.99
+A|opus_nb_8k|2|0.996|0.983|0.064|0.993
+A|opus_nb_8k|3|0.997|0.994|0.04|0.995
+A|opus_nb_8k|4|0.999|0.998|0.024|0.996
+A|opus_nb_8k|5|1.0|0.999|0.015|0.998
+A|opus_nb_8k|6|1.0|0.999|0.022|1.0
+A|opus_nb_8k|7|1.0|0.998|0.026|1.0
+A|opus_nb_8k|8|1.0|0.998|0.024|1.0
+A|opus_nb_8k|9|1.0|0.997|0.028|1.0
+A|opus_nb_8k|10|1.0|0.997|0.026|1.0
+A|opus_nb_8k|11|1.0|0.997|0.026|1.0
+A|opus_nb_8k|12|1.0|0.998|0.024|1.0
+A|opus_nb_8k|13|1.0|0.998|0.022|1.0
+A|opus_nb_8k|14|1.0|0.998|0.026|1.0
+A|opus_nb_8k|15|1.0|0.998|0.024|1.0
+A|opus_nb_8k|16|1.0|0.997|0.028|1.0
+A|opus_nb_8k|17|1.0|0.996|0.032|1.0
+A|opus_nb_8k|18|1.0|0.996|0.035|1.0
+A|opus_nb_8k|19|1.0|0.99|0.055|1.0
+A|opus_nb_8k|20|1.0|0.994|0.042|1.0
+A|opus_nb_8k|21|1.0|0.985|0.064|1.0
+A|opus_nb_8k|22|1.0|0.88|0.169|1.0
+A|opus_nb_8k|23|1.0|0.88|0.164|1.0
+
+
+## Test-time fix (test half; percentages)
+ckpt|stage|layer|variant|eer|real_rejected|fakes_accepted|genuine_mean|fake_mean
+A|clean|-1|none|0.0|0.0|4.48|4.5|-3.61
+A|amrnb_4k75|-1|BatchNorm adaptation on call audio (label-free)|30.05|94.52|0.21|-4.53|-5.13
+A|amrnb_4k75|-1|none|25.62|87.06|0.43|-3.47|-3.65
+A|amrnb_4k75|-1|recalibrate threshold (labelled call data)|25.62|25.66|26.01|-3.47|-3.65
+A|amrnb_4k75|-1|shift threshold by mean genuine drift|25.62|0.0|100.0|-3.47|-3.65
+A|amrnb_4k75|5|remove drift, label-free (layer mean alignment)|15.14|54.61|0.85|-2.82|-3.63
+A|amrnb_4k75|5|remove drift, genuine pairs only|12.54|35.75|1.49|-2.2|-3.62
+A|amrnb_4k75|5|remove drift fitted on OTHER codecs|20.0|73.46|0.64|-3.25|-3.64
+A|amrnb_4k75|5|CORAL at this layer, label-free|15.35|42.11|2.77|-2.68|-3.58
+A|amrnb_4k75|5|remove top-4 drift directions, label-free|8.76|3.07|16.42|-0.58|-3.47
+A|amrnb_4k75|5|remove top-16 drift directions, label-free|9.84|2.85|18.34|0.24|-3.43
+A|amrnb_4k75|5|random direction, same size|26.27|89.91|0.43|-3.48|-3.65
+A|amrnb_4k75|5|clean cost: label-free fix applied to clean audio|0.0|0.0|17.06|4.44|-3.36
+A|amrnb_4k75|5|reverse patch: add the drift to clean audio|0.0|0.0|0.0|3.84|-3.64
+A|amrnb_4k75|5|reverse patch control: add a random direction to clean audio|0.0|0.0|5.33|4.51|-3.58
+A|amrnb_4k75|11|remove drift, label-free (layer mean alignment)|12.76|33.33|2.77|-2.12|-3.61
+A|amrnb_4k75|11|remove drift, genuine pairs only|8.54|5.7|12.37|0.38|-3.5
+A|amrnb_4k75|11|remove drift fitted on OTHER codecs|17.51|58.11|1.07|-2.96|-3.63
+A|amrnb_4k75|11|CORAL at this layer, label-free|14.49|0.0|100.0|2.53|0.52
+A|amrnb_4k75|11|remove top-4 drift directions, label-free|18.16|19.74|17.06|-2.48|-3.47
+A|amrnb_4k75|11|remove top-16 drift directions, label-free|14.27|4.17|24.31|-1.49|-3.35
+A|amrnb_4k75|11|random direction, same size|23.46|83.55|0.64|-3.44|-3.64
+A|amrnb_4k75|11|clean cost: label-free fix applied to clean audio|1.51|0.0|22.17|4.19|-3.05
+A|amrnb_4k75|11|reverse patch: add the drift to clean audio|0.0|0.0|0.0|2.74|-3.64
+A|amrnb_4k75|11|reverse patch control: add a random direction to clean audio|0.0|0.0|5.54|4.47|-3.59
+A|amrnb_4k75|17|remove drift, label-free (layer mean alignment)|10.92|8.77|13.01|-0.82|-3.48
+A|amrnb_4k75|17|remove drift, genuine pairs only|7.03|0.0|91.68|3.61|-2.44
+A|amrnb_4k75|17|remove drift fitted on OTHER codecs|14.49|34.21|4.48|-2.47|-3.57
+A|amrnb_4k75|17|CORAL at this layer, label-free|16.65|0.0|88.49|2.59|-1.21
+A|amrnb_4k75|17|remove top-4 drift directions, label-free|15.35|4.39|28.14|-2.44|-3.4
+A|amrnb_4k75|17|remove top-16 drift directions, label-free|16.65|3.29|34.33|-2.3|-3.33
+A|amrnb_4k75|17|random direction, same size|22.38|61.4|3.2|-3.22|-3.58
+A|amrnb_4k75|17|clean cost: label-free fix applied to clean audio|4.0|0.0|40.51|3.98|-2.74
+A|amrnb_4k75|17|reverse patch: add the drift to clean audio|0.0|0.88|0.0|0.35|-3.66
+A|amrnb_4k75|17|reverse patch control: add a random direction to clean audio|0.0|0.0|4.48|4.52|-3.61
+A|amrnb_4k75|23|remove drift, label-free (layer mean alignment)|41.84|0.0|100.0|0.37|0.02
+A|amrnb_4k75|23|remove drift, genuine pairs only|21.95|0.0|100.0|4.41|4.24
+A|amrnb_4k75|23|remove drift fitted on OTHER codecs|34.7|0.0|100.0|-1.25|-1.59
+A|amrnb_4k75|23|CORAL at this layer, label-free|56.76|13.6|98.29|-1.18|-1.33
+A|amrnb_4k75|23|remove top-4 drift directions, label-free|62.7|0.0|100.0|-0.01|0.12
+A|amrnb_4k75|23|remove top-16 drift directions, label-free|39.89|0.0|100.0|0.06|0.02
+A|amrnb_4k75|23|random direction, same size|33.51|0.0|100.0|-2.74|-2.91
+A|amrnb_4k75|23|clean cost: label-free fix applied to clean audio|0.0|0.0|100.0|4.25|0.15
+A|amrnb_4k75|23|reverse patch: add the drift to clean audio|0.0|0.0|0.0|0.11|-4.08
+A|amrnb_4k75|23|reverse patch control: add a random direction to clean audio|0.0|0.0|100.0|4.28|-3.19
+A|g711u_loss10|-1|BatchNorm adaptation on call audio (label-free)|24.97|81.14|0.0|-3.2|-4.76
+A|g711u_loss10|-1|none|10.7|59.87|0.0|-2.77|-3.64
+A|g711u_loss10|-1|recalibrate threshold (labelled call data)|10.7|11.62|10.23|-2.77|-3.64
+A|g711u_loss10|-1|shift threshold by mean genuine drift|10.7|0.0|100.0|-2.77|-3.64
+A|g711u_loss10|5|remove drift, label-free (layer mean alignment)|6.38|25.22|0.0|-1.72|-3.63
+A|g711u_loss10|5|remove drift, genuine pairs only|5.51|18.64|0.21|-1.32|-3.62
+A|g711u_loss10|5|remove drift fitted on OTHER codecs|4.22|15.79|0.43|-1.01|-3.62
+A|g711u_loss10|5|CORAL at this layer, label-free|3.24|8.33|0.0|-0.63|-3.62
+A|g711u_loss10|5|remove top-4 drift directions, label-free|2.16|0.0|15.99|3.25|-3.48
+A|g711u_loss10|5|remove top-16 drift directions, label-free|2.6|0.0|12.79|2.89|-3.5
+A|g711u_loss10|5|random direction, same size|10.05|55.04|0.0|-2.7|-3.64
+A|g711u_loss10|5|clean cost: label-free fix applied to clean audio|0.0|0.0|10.87|4.5|-3.52
+A|g711u_loss10|5|reverse patch: add the drift to clean audio|0.0|0.0|0.64|4.35|-3.64
+A|g711u_loss10|5|reverse patch control: add a random direction to clean audio|0.0|0.0|4.69|4.5|-3.61
+A|g711u_loss10|11|remove drift, label-free (layer mean alignment)|2.6|7.24|0.43|-0.19|-3.61
+A|g711u_loss10|11|remove drift, genuine pairs only|1.51|1.1|4.26|1.95|-3.57
+A|g711u_loss10|11|remove drift fitted on OTHER codecs|2.81|7.02|0.64|-0.13|-3.61
+A|g711u_loss10|11|CORAL at this layer, label-free|4.65|0.0|89.13|3.66|-1.29
+A|g711u_loss10|11|remove top-4 drift directions, label-free|4.0|0.88|13.86|-0.97|-3.54
+A|g711u_loss10|11|remove top-16 drift directions, label-free|3.03|0.0|33.26|1.55|-3.4
+A|g711u_loss10|11|random direction, same size|11.67|61.62|0.0|-2.81|-3.64
+A|g711u_loss10|11|clean cost: label-free fix applied to clean audio|0.43|0.0|17.27|4.26|-3.23
+A|g711u_loss10|11|reverse patch: add the drift to clean audio|0.0|0.0|0.0|3.6|-3.64
+A|g711u_loss10|11|reverse patch control: add a random direction to clean audio|0.0|0.0|4.69|4.41|-3.59
+A|g711u_loss10|17|remove drift, label-free (layer mean alignment)|2.6|2.63|2.56|0.55|-3.57
+A|g711u_loss10|17|remove drift, genuine pairs only|1.95|0.0|40.09|3.64|-3.36
+A|g711u_loss10|17|remove drift fitted on OTHER codecs|2.16|1.97|5.97|1.0|-3.55
+A|g711u_loss10|17|CORAL at this layer, label-free|4.43|0.88|21.54|2.39|-3.42
+A|g711u_loss10|17|remove top-4 drift directions, label-free|5.3|0.0|21.96|-1.78|-3.48
+A|g711u_loss10|17|remove top-16 drift directions, label-free|7.68|0.88|26.23|-2.31|-3.46
+A|g711u_loss10|17|random direction, same size|9.62|59.21|0.0|-2.85|-3.64
+A|g711u_loss10|17|clean cost: label-free fix applied to clean audio|0.65|0.0|22.6|4.13|-3.14
+A|g711u_loss10|17|reverse patch: add the drift to clean audio|0.0|0.0|0.0|2.39|-3.66
+A|g711u_loss10|17|reverse patch control: add a random direction to clean audio|0.0|0.0|6.18|4.46|-3.56
+A|g711u_loss10|23|remove drift, label-free (layer mean alignment)|11.14|0.0|100.0|0.69|-0.73
+A|g711u_loss10|23|remove drift, genuine pairs only|12.76|0.0|100.0|4.34|4.1
+A|g711u_loss10|23|remove drift fitted on OTHER codecs|10.27|0.0|100.0|0.28|-1.18
+A|g711u_loss10|23|CORAL at this layer, label-free|36.65|0.0|100.0|-0.03|-1.71
+A|g711u_loss10|23|remove top-4 drift directions, label-free|57.19|0.0|100.0|-0.02|0.08
+A|g711u_loss10|23|remove top-16 drift directions, label-free|28.76|0.0|100.0|0.07|-0.01
+A|g711u_loss10|23|random direction, same size|14.49|0.0|89.98|-2.55|-3.39
+A|g711u_loss10|23|clean cost: label-free fix applied to clean audio|0.0|0.0|100.0|4.28|-0.63
+A|g711u_loss10|23|reverse patch: add the drift to clean audio|0.0|0.0|0.0|0.94|-4.05
+A|g711u_loss10|23|reverse patch control: add a random direction to clean audio|0.0|0.0|100.0|4.11|-2.9
+A|opus_nb_8k|-1|BatchNorm adaptation on call audio (label-free)|13.84|56.58|0.0|-1.68|-4.73
+A|opus_nb_8k|-1|none|6.38|30.92|0.0|-1.27|-3.65
+A|opus_nb_8k|-1|recalibrate threshold (labelled call data)|6.38|9.21|3.41|-1.27|-3.65
+A|opus_nb_8k|-1|shift threshold by mean genuine drift|6.38|0.0|100.0|-1.27|-3.65
+A|opus_nb_8k|5|remove drift, label-free (layer mean alignment)|3.24|7.68|0.21|1.02|-3.64
+A|opus_nb_8k|5|remove drift, genuine pairs only|2.38|5.26|0.43|1.63|-3.63
+A|opus_nb_8k|5|remove drift fitted on OTHER codecs|2.6|5.7|0.43|1.62|-3.63
+A|opus_nb_8k|5|CORAL at this layer, label-free|2.16|3.51|1.07|1.02|-3.59
+A|opus_nb_8k|5|remove top-4 drift directions, label-free|1.3|0.0|14.29|3.39|-3.51
+A|opus_nb_8k|5|remove top-16 drift directions, label-free|2.6|0.22|12.79|2.68|-3.51
+A|opus_nb_8k|5|random direction, same size|6.16|28.07|0.0|-0.97|-3.65
+A|opus_nb_8k|5|clean cost: label-free fix applied to clean audio|0.0|0.0|11.73|4.48|-3.5
+A|opus_nb_8k|5|reverse patch: add the drift to clean audio|0.0|0.0|0.64|4.3|-3.64
+A|opus_nb_8k|5|reverse patch control: add a random direction to clean audio|0.0|0.0|4.48|4.49|-3.61
+A|opus_nb_8k|11|remove drift, label-free (layer mean alignment)|3.24|7.02|0.43|1.37|-3.63
+A|opus_nb_8k|11|remove drift, genuine pairs only|2.16|4.17|1.71|2.24|-3.62
+A|opus_nb_8k|11|remove drift fitted on OTHER codecs|1.73|1.75|1.71|2.86|-3.61
+A|opus_nb_8k|11|CORAL at this layer, label-free|6.59|2.41|19.62|1.56|-3.48
+A|opus_nb_8k|11|remove top-4 drift directions, label-free|6.16|1.54|14.29|-0.34|-3.52
+A|opus_nb_8k|11|remove top-16 drift directions, label-free|4.65|0.22|20.47|-0.15|-3.45
+A|opus_nb_8k|11|random direction, same size|5.95|28.29|0.0|-1.3|-3.65
+A|opus_nb_8k|11|clean cost: label-free fix applied to clean audio|0.0|0.0|12.37|4.35|-3.43
+A|opus_nb_8k|11|reverse patch: add the drift to clean audio|0.0|0.0|0.0|4.14|-3.64
+A|opus_nb_8k|11|reverse patch control: add a random direction to clean audio|0.0|0.0|5.12|4.52|-3.61
+A|opus_nb_8k|17|remove drift, label-free (layer mean alignment)|2.81|3.07|2.35|2.02|-3.59
+A|opus_nb_8k|17|remove drift, genuine pairs only|2.16|0.22|9.17|3.35|-3.53
+A|opus_nb_8k|17|remove drift fitted on OTHER codecs|2.16|0.22|7.46|3.4|-3.54
+A|opus_nb_8k|17|CORAL at this layer, label-free|3.46|2.85|4.9|2.02|-3.55
+A|opus_nb_8k|17|remove top-4 drift directions, label-free|5.08|0.44|24.73|-1.35|-3.46
+A|opus_nb_8k|17|remove top-16 drift directions, label-free|7.89|0.88|25.59|-1.94|-3.43
+A|opus_nb_8k|17|random direction, same size|5.73|28.29|0.0|-1.51|-3.65
+A|opus_nb_8k|17|clean cost: label-free fix applied to clean audio|0.43|0.0|16.63|4.22|-3.31
+A|opus_nb_8k|17|reverse patch: add the drift to clean audio|0.0|0.0|0.0|3.55|-3.66
+A|opus_nb_8k|17|reverse patch control: add a random direction to clean audio|0.0|0.0|5.97|4.5|-3.58
+A|opus_nb_8k|23|remove drift, label-free (layer mean alignment)|6.16|0.0|100.0|0.91|-2.26
+A|opus_nb_8k|23|remove drift, genuine pairs only|8.32|0.0|100.0|3.51|1.6
+A|opus_nb_8k|23|remove drift fitted on OTHER codecs|8.11|0.0|100.0|2.35|-0.37
+A|opus_nb_8k|23|CORAL at this layer, label-free|27.46|3.29|98.51|0.2|-2.64
+A|opus_nb_8k|23|remove top-4 drift directions, label-free|50.49|0.0|100.0|0.01|0.05
+A|opus_nb_8k|23|remove top-16 drift directions, label-free|43.89|0.0|100.0|0.03|0.01
+A|opus_nb_8k|23|random direction, same size|7.68|25.22|0.21|-1.48|-3.59
+A|opus_nb_8k|23|clean cost: label-free fix applied to clean audio|0.0|0.0|100.0|4.32|-2.14
+A|opus_nb_8k|23|reverse patch: add the drift to clean audio|0.0|0.0|0.21|2.73|-3.92
+A|opus_nb_8k|23|reverse patch control: add a random direction to clean audio|0.0|0.0|100.0|4.1|-3.21
+
+
+## SSL-AASIST A (DF-tuned RawBoost)
+condition|EER %|ΔEER [95% CI]|real rejected %|fakes accepted %|actDCF|minDCF|genuine shift [95% CI]|fake shift [95% CI]|kind|LLR shift genuine / fake
+clean|0.0|+0.0 [+0.0, +0.0]|0.0|4.858|0.049|0.0|+0.00 [+0.00, +0.00]|+0.00 [+0.00, +0.00]||+0.00 / +0.00
+clean_rms|0.402|+0.4 [+0.2, +0.8]|0.0|4.858|0.049|0.009|-0.06 [-0.09, -0.03]|+0.01 [-0.01, +0.04]|no_effect|-0.14 / +0.03
+clean_trim|3.521|+3.5 [+0.0, +0.0]|2.1|5.061|0.091|0.084|-2.92 [-3.10, -2.74]|-0.00 [-0.01, -0.00]||-6.93 / -0.01
+bandpass_300_3400|2.918|+2.9 [+2.2, +3.7]|1.4|3.745|0.064|0.06|-1.84 [-2.00, -1.69]|+0.03 [+0.00, +0.05]|no_effect|-4.47 / +0.05
+nb_resample|0.201|+0.2 [+0.0, +0.4]|0.0|4.15|0.041|0.004|-0.05 [-0.08, -0.03]|+0.00 [-0.01, +0.01]|no_effect|-0.15 / -0.00
+g711u|0.201|+0.2 [+0.0, +0.5]|0.0|4.049|0.04|0.005|-0.07 [-0.10, -0.05]|-0.00 [-0.02, +0.01]|no_effect|-0.20 / -0.02
+g711u_burst5|3.421|+3.4 [+2.6, +4.2]|5.1|2.024|0.117|0.084|-2.62 [-2.82, -2.42]|-0.02 [-0.04, -0.01]|no_effect|-6.19 / -0.06
+g711u_burst10|4.98|+5.0 [+4.0, +5.8]|19.5|0.911|0.38|0.136|-4.95 [-5.16, -4.75]|-0.03 [-0.04, -0.02]|threshold_only|-11.61 / -0.07
+g711u_loss10|10.413|+10.4 [+9.1, +11.9]|59.2|0.101|1.126|0.282|-7.33 [-7.43, -7.22]|-0.05 [-0.07, -0.03]|ranking_breaks|-17.08 / -0.12
+gsm_fr|4.376|+4.4 [+3.4, +5.2]|16.7|0.0|0.317|0.124|-4.83 [-5.03, -4.64]|-0.06 [-0.08, -0.04]|threshold_only|-11.37 / -0.13
+amrwb_23k85|0.503|+0.5 [+0.2, +0.9]|0.5|0.607|0.016|0.014|-0.97 [-1.09, -0.85]|-0.05 [-0.06, -0.03]|no_effect|-2.40 / -0.11
+amrwb_12k65|3.018|+3.0 [+2.2, +3.7]|11.3|0.0|0.215|0.079|-4.05 [-4.26, -3.84]|-0.06 [-0.08, -0.04]|no_effect|-9.55 / -0.14
+amrnb_12k2|0.805|+0.8 [+0.5, +1.2]|1.0|0.506|0.024|0.022|-1.34 [-1.48, -1.20]|-0.04 [-0.06, -0.03]|no_effect|-3.25 / -0.11
+amrnb_7k4|5.382|+5.4 [+4.5, +6.4]|18.3|0.202|0.35|0.152|-4.94 [-5.15, -4.73]|-0.05 [-0.07, -0.03]|threshold_only|-11.61 / -0.12
+amrnb_5k9|17.103|+17.1 [+15.4, +18.7]|63.6|0.101|1.209|0.465|-7.45 [-7.55, -7.35]|-0.06 [-0.07, -0.04]|ranking_breaks|-17.35 / -0.13
+amrnb_4k75|27.918|+27.9 [+25.9, +29.7]|88.9|0.202|1.691|0.763|-8.01 [-8.04, -7.97]|-0.05 [-0.07, -0.04]|ranking_breaks|-18.61 / -0.13
+opus_wb_24k|0.302|+0.3 [+0.0, +0.4]|0.0|2.733|0.027|0.004|-0.06 [-0.09, -0.03]|-0.02 [-0.03, -0.02]|no_effect|-0.17 / -0.05
+opus_wb_16k|0.302|+0.3 [+0.1, +0.6]|0.1|0.506|0.007|0.006|-0.36 [-0.44, -0.29]|-0.04 [-0.06, -0.03]|no_effect|-0.93 / -0.10
+opus_nb_8k|5.885|+5.9 [+4.8, +7.0]|26.0|0.0|0.494|0.164|-5.40 [-5.57, -5.22]|-0.06 [-0.08, -0.04]|threshold_only|-12.68 / -0.14
+opus_nb_8k_plc5|13.481|+13.5 [+11.9, +14.5]|53.5|0.0|1.016|0.375|-6.93 [-7.07, -6.80]|-0.06 [-0.08, -0.04]|ranking_breaks|-16.17 / -0.14
+opus_nb_8k_plc10|23.29|+23.3 [+21.6, +25.1]|79.9|0.0|1.518|0.648|-7.72 [-7.79, -7.64]|-0.06 [-0.08, -0.04]|ranking_breaks|-17.95 / -0.13
+opus_nb_8k_plc20|30.785|+30.8 [+29.1, +32.7]|93.9|0.0|1.784|0.803|-8.04 [-8.07, -8.00]|-0.06 [-0.08, -0.04]|ranking_breaks|-18.69 / -0.13
+webrtc_only|0.201|+0.2 [+0.0, +0.4]|0.0|0.81|0.008|0.003|-0.21 [-0.26, -0.16]|-0.03 [-0.05, -0.02]|no_effect|-0.56 / -0.08
+webrtc_amrnb_12k2|1.61|+1.6 [+1.0, +2.3]|5.8|0.0|0.11|0.043|-3.35 [-3.54, -3.16]|-0.05 [-0.06, -0.03]|no_effect|-7.94 / -0.11
+chain_bp_amr12k2_loss5|15.895|+15.9 [+14.3, +17.4]|63.0|0.304|1.2|0.452|-7.45 [-7.55, -7.35]|-0.04 [-0.06, -0.03]|ranking_breaks|-17.36 / -0.11
+g711u_loss10__rms|12.676|+12.7 [+11.3, +14.3]|68.4|0.202|1.302|0.364|-7.52 [-7.61, -7.42]|-0.05 [-0.07, -0.03]|ranking_breaks|-17.51 / -0.12
+g711u_loss10__trim|23.189|+19.7 [+17.7, +21.6]|94.4|0.101|1.795|0.658|-5.07 [-5.25, -4.89]|-0.05 [-0.06, -0.03]|ranking_breaks|-11.60 / -0.11
+amrnb_4k75__rms|21.881|+21.9 [+20.1, +23.7]|82.4|0.506|1.571|0.594|-7.94 [-7.97, -7.89]|-0.05 [-0.07, -0.04]|ranking_breaks|-18.48 / -0.14
+amrnb_4k75__trim|35.815|+32.3 [+30.1, +34.4]|99.7|0.0|1.894|0.916|-5.20 [-5.38, -5.02]|-0.06 [-0.08, -0.04]|ranking_breaks|-11.91 / -0.14
+opus_nb_8k__rms|6.589|+6.6 [+5.6, +7.7]|22.9|0.405|0.439|0.185|-5.59 [-5.76, -5.42]|-0.05 [-0.07, -0.04]|threshold_only|-13.15 / -0.14
+opus_nb_8k__trim|15.292|+11.8 [+10.3, +13.3]|79.0|0.0|1.501|0.424|-4.81 [-4.98, -4.64]|-0.06 [-0.08, -0.04]|ranking_breaks|-10.99 / -0.14
+
+
+## Shortcut test (real rejected % / EER %)
+detector|stage|as is|+ loudness norm|+ silence removed
+A|g711u_loss10|59.2 / 10.4|68.4 / 12.7|94.4 / 23.2
+A|amrnb_4k75|88.9 / 27.9|82.4 / 21.9|99.7 / 35.8
+A|opus_nb_8k|26.0 / 5.9|22.9 / 6.6|79.0 / 15.3
+
+
+## Ceiling check
+detector|stage|genuine_shift|fake_shift|hardest_fakes_shift|genuine_shift_per_margin|fake_shift_per_margin|corr_genuine_shift_vs_clean_score|llr_genuine_shift|llr_fake_shift|fake_logit_shift_genuine
+A|g711u_loss10|-7.332|-0.048|-0.405|-1.005|-0.046|-0.098|-17.077|-0.119|9.745
+A|amrnb_4k75|-8.005|-0.055|-0.437|-1.019|-0.101|-0.305|-18.613|-0.134|10.608
+A|opus_nb_8k|-5.401|-0.06|-0.416|-0.873|-0.115|-0.062|-12.684|-0.14|7.283
+
+
+## Threshold robustness (real rejected / fakes accepted %, at dev_EER, mid_gap, fakes_1pct)
+||fakes_accepted|fakes_accepted|fakes_accepted|real_rejected|real_rejected|real_rejected
+threshold||dev_EER|fakes_1pct|mid_gap|dev_EER|fakes_1pct|mid_gap
+detector|condition||||||
+A|amrnb_12k2|0.5|3.8|0.0|1.0|0.2|12.8
+A|amrnb_4k75|0.2|1.5|0.0|88.9|73.8|99.5
+A|amrnb_4k75__rms|0.5|3.8|0.0|82.4|62.6|99.3
+A|amrnb_4k75__trim|0.0|0.1|0.0|99.7|98.0|99.9
+A|amrnb_5k9|0.1|0.9|0.0|63.6|45.9|94.0
+A|amrnb_7k4|0.2|1.8|0.0|18.3|8.3|61.1
+A|amrwb_12k65|0.0|1.1|0.0|11.3|4.6|47.0
+A|amrwb_23k85|0.6|4.0|0.0|0.5|0.3|8.3
+A|bandpass_300_3400|3.7|9.5|0.5|1.4|0.3|18.9
+A|chain_bp_amr12k2_loss5|0.3|3.2|0.0|63.0|40.3|93.9
+A|clean|4.9|9.5|0.3|0.0|0.0|0.0
+A|clean_rms|4.9|7.6|0.7|0.0|0.0|0.4
+A|clean_trim|5.1|9.1|0.3|2.1|0.8|34.7
+A|g711u|4.0|7.8|0.2|0.0|0.0|0.3
+A|g711u_burst10|0.9|2.9|0.0|19.5|7.9|60.6
+A|g711u_burst5|2.0|4.4|0.0|5.1|2.4|30.3
+A|g711u_loss10|0.1|0.8|0.0|59.2|35.3|92.1
+A|g711u_loss10__rms|0.2|0.9|0.0|68.4|44.2|94.5
+A|g711u_loss10__trim|0.1|0.5|0.0|94.4|83.2|99.0
+A|gsm_fr|0.0|0.8|0.0|16.7|8.1|58.8
+A|nb_resample|4.1|8.3|0.2|0.0|0.0|0.1
+A|opus_nb_8k|0.0|1.3|0.0|26.0|14.9|65.2
+A|opus_nb_8k__rms|0.4|2.2|0.0|22.9|12.0|70.0
+A|opus_nb_8k__trim|0.0|0.8|0.0|79.0|64.6|96.1
+A|opus_nb_8k_plc10|0.0|0.9|0.0|79.9|67.3|96.2
+A|opus_nb_8k_plc20|0.0|0.9|0.0|93.9|85.6|99.5
+A|opus_nb_8k_plc5|0.0|0.6|0.0|53.5|37.7|86.5
+A|opus_wb_16k|0.5|4.1|0.0|0.1|0.1|2.8
+A|opus_wb_24k|2.7|6.7|0.0|0.0|0.0|0.4
+A|webrtc_amrnb_12k2|0.0|0.9|0.0|5.8|1.9|36.9
+A|webrtc_only|0.8|4.1|0.0|0.0|0.0|1.1
+
+
+## Fakes accepted % per attack
+detector|attack|amrnb_4k75|clean|g711u_loss10|opus_nb_8k
+A|A07|0.0|0.0|0.0|0.0
+A|A08|0.0|0.0|0.0|0.0
+A|A09|0.0|0.0|0.0|0.0
+A|A10|0.0|44.7|0.0|0.0
+A|A11|0.0|17.1|0.0|0.0
+A|A12|0.0|1.3|1.3|0.0
+A|A13|0.0|0.0|0.0|0.0
+A|A14|0.0|0.0|0.0|0.0
+A|A15|0.0|0.0|0.0|0.0
+A|A16|0.0|0.0|0.0|0.0
+A|A17|2.6|0.0|0.0|0.0
+A|A18|0.0|0.0|0.0|0.0
+A|A19|0.0|0.0|0.0|0.0
+
+
+## ElevenLabs/Respeecher fakes accepted %
+detector|stage|accepted @ dev_EER %|accepted @ mid_gap %|accepted @ fakes_1pct %
+A|amrnb_4k75|2.0|0.7|8.0
+A|clean|52.5|10.5|71.2
+A|g711u_loss10|2.2|0.5|7.5
+A|opus_nb_8k|9.0|1.0|25.3
+

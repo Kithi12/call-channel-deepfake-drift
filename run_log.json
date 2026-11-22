@@ -1,0 +1,51 @@
+{
+ "when": "2026-11-10 04:45:30",
+ "cfg": {
+  "SEED": 1234,
+  "N_EVAL_BONA": 1000,
+  "N_EVAL_SPOOF": 1000,
+  "N_DEV_BONA": 500,
+  "N_DEV_SPOOF": 500,
+  "BATCH": 16,
+  "OUT": "/content/drive/MyDrive/fyp_pilot",
+  "WORK": "/content/work",
+  "LA_ZIP_URL": "https://datashare.ed.ac.uk/bitstream/handle/10283/3336/LA.zip",
+  "LA_ZIP": "",
+  "CKPT_FOLDER": "https://drive.google.com/drive/folders/1c4ywztEVlYVijfwbGLl9OEa1SNtFKppB",
+  "CKPT": ""
+ },
+ "repo_commit": "4acaa61dcef5f7610f43aa4d0b29c4559b970cd2",
+ "checkpoint": "Best_LA_model_for_DF.pth",
+ "load_report": {
+  "xlsr_layers": 24,
+  "conv_bias": true,
+  "ssl_params_loaded": 421,
+  "ignored_pretraining_params": 8,
+  "backend_params_loaded": 245
+ },
+ "ffmpeg": "ffmpeg version 7.0.2-static https://johnvansickle.com/ffmpeg/  Copyright (c) 2000-2024 the FFmpeg developers",
+ "encoders": [
+  "libopencore_amrnb",
+  "libopus",
+  "pcm_mulaw"
+ ],
+ "conditions": {
+  "clean": "No processing",
+  "clean_rms": "Clean, loudness-normalised to -26 dBFS (loudness/AGC control)",
+  "bandpass_300_3400": "Telephone band 300-3,400 Hz, zero-phase filter (band-limit control)",
+  "nb_resample": "16 -> 8 -> 16 kHz resampling only (control for all 8 kHz codecs)",
+  "g711u": "G.711 mu-law, 64 kbps",
+  "g711u_loss10": "G.711 mu-law with 10% 20 ms frame loss, repetition concealment",
+  "amrnb_12k2": "AMR-NB 12.2 kbps (mobile)",
+  "amrnb_4k75": "AMR-NB 4.75 kbps (mobile, low rate)",
+  "opus_nb_8k": "Opus narrowband, 8 kbps, VoIP mode"
+ },
+ "torch": "2.14.1+cu130",
+ "transformers": "5.22.1",
+ "gpu": "Tesla T4",
+ "python": "3.13.16",
+ "dev_eer": 0.0,
+ "threshold": -3.4372589588165283,
+ "eval_clean_eer": 0.0,
+ "reproduced": true
+}
