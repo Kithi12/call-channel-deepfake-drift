@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/1465731794.svg)](https://doi.org/10.5281/zenodo.24440109)
+[[![DOI](https://zenodo.org/badge/1465731794.svg)](https://doi.org/10.5281/zenodo.24440109)](https://doi.org/10.5281/zenodo.24445463)
 
 # Call compression pushes genuine speech toward "fake"
 
