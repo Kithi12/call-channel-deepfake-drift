@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/1465731794.svg)](https://doi.org/10.5281/zenodo.24440109)
+
 # Call compression pushes genuine speech toward "fake"
 
 Code and results for a paired, stage-by-stage study of how telephone-call processing affects frozen speech deepfake detectors.
