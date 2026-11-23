@@ -5,6 +5,8 @@ Reads subset.csv, scores/ and week3/per_utterance_scores_week3.csv.gz; writes we
 Each resample draws the 34 held-out speakers with replacement, keeps all of a speaker's utterances, and scores
 every method on the same trials, so the intervals are for differences between methods. Values are percentage points.
 """
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))   # repository root
 import numpy as np, pandas as pd
 from pilot_lib import eer as _eer, speaker_split
 
