@@ -19,15 +19,18 @@ pilot_lib.py      shared code used by every notebook: call-stage simulator, code
                   alignment, SSL-AASIST loader, layer taps and interventions, metrics
 subset.csv        the evaluation (1,988) and development (998) utterances used, drawn
                   from ASVspoof 2019 LA with seed 1234 (speaker, utt, attack, label, part)
-notebooks/        week1 (behaviour), week2 (inside the model, controls), week3 (Kaggle:
-                  layer sweep, baselines, gate, ASVspoof 2021 LA, random draws)
+notebooks/        week1 (behaviour) and week2 (inside the model, controls), run on Google Colab;
+                  week3_kaggle.ipynb produced every week-3 result (layer sweep, baselines, gate,
+                  ASVspoof 2021 LA, 20 random directions); week3_soundness_tests.ipynb runs
+                  the same tests on Google Colab
 scores/           checkpoint A: per-utterance scores, one CSV per call stage (eval__<stage>.csv)
 scores_B/         checkpoint B: same layout
 week1/            per-stage summary (EER, rates at the threshold, minDCF, DCF at threshold)
 week2/            layer geometry, probes, test-time correction, threshold robustness,
                   ElevenLabs/Respeecher scores
 week3/            layer sweep, baselines, gate, shortcut controls, ASVspoof 2021 LA,
-                  20 random directions, per-utterance week-3 scores, fit/test split
+                  20 random directions, per-utterance week-3 scores, fit/test split,
+                  speaker-level paired bootstrap (speaker_bootstrap.py and its output)
 ```
 
 ## Which file reproduces what
@@ -44,6 +47,7 @@ week3/            layer sweep, baselines, gate, shortcut controls, ASVspoof 2021
 | Table IV (corrections at layers 5/11/17/23) | `week2/test_time_fix.csv` |
 | Fig. 3 (layer sweep, chosen layer) | `week3/layer_sweep.csv`, `week3/chosen_layers.json` |
 | Table V (baselines at layer 17) | `week3/baselines_at_chosen_layer.csv`, `week3/random_draws_L17.csv` |
+| Speaker-level intervals for the corrections (Sec. V-D) | `week3/speaker_level_bootstrap.csv`, made by `python week3/speaker_bootstrap.py` from the repository root |
 | Table VI, call gate (Sec. V-D) | `week3/gate_end_to_end.csv`, `week3/gate_detection.csv` |
 | Table VII, Fig. 4 (ASVspoof 2021 LA) | `week3/la21_behaviour.csv`, `week3/la21_geometry.csv`, `week3/la21_transplant.csv` |
 | Per-utterance week-3 scores | `week3/per_utterance_scores_week3.csv.gz` (columns: tag, part, utt, speaker, label, score) with `week3/fit_test_split.csv` |
@@ -60,10 +64,10 @@ Scores are the bona fide logit of SSL-AASIST (higher = more genuine). Rates use 
 ## Reproducing
 
 1. Download the datasets and checkpoints above; place the audio listed in `subset.csv` and the checkpoints as the first cells of each notebook describe.
-2. Run `notebooks/week1_*`, then `week2_*` (Google Colab, T4 GPU), then `week3_kaggle.ipynb` (Kaggle, T4, Internet on). Each notebook skips steps whose outputs already exist.
-3. The speaker split is deterministic: speakers sorted, shuffled with `numpy.random.default_rng(1234)`, first half = fit (1,063 utterances), second half = test (925).
+2. Run `notebooks/week1_*`, then `week2_*` (Google Colab, T4 GPU), then `notebooks/week3_kaggle.ipynb` (Kaggle, T4, Internet on). Each notebook skips steps whose outputs already exist.
+3. The speaker split is deterministic: speakers sorted, shuffled with `numpy.random.default_rng(1234)`, first half = fit (33 speakers, 1,063 utterances), second half = test (34 speakers, 925); the result is in `week3/fit_test_split.csv`.
 
-Notes: G.711 frame loss is seeded per utterance; Opus packet loss uses `opusdec --packet-loss`, whose loss pattern is fixed and identical for every file. Software: Python 3, PyTorch 2.14.1, Transformers 5.22.1, ffmpeg 7.0.2, opus-tools, webrtc-noise-gain (see `requirements.txt`).
+Notes: G.711 frame loss is seeded per utterance; Opus packet loss uses `opusdec --packet-loss`, which draws losses from an unseeded random-number generator, so every file receives the same loss pattern at a given rate. Software: Python 3, PyTorch 2.14.1, Transformers 5.22.1, ffmpeg 7.0.2, opus-tools, webrtc-noise-gain (see `requirements.txt`).
 
 ## Citation
 
