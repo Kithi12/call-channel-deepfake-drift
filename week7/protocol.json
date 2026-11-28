@@ -1,0 +1,17 @@
+{
+ "fixed_on": "2026-11-27 (written to disk before any W7-2 score is computed)",
+ "purpose": "confirmatory test of layer-17 drift removal on ASVspoof 2019 LA utterances never inspected before",
+ "speakers": "the 34 test-half speakers of speaker_split(seed 1234); no fit-half speaker",
+ "utterances": "eval utterances of those speakers that are not in subset.csv (the 1,988 utterances used so far)",
+ "sample": "1500 genuine + up to 115 spoofed per attack A07-A19, sampling seed 2027",
+ "stages": [
+  "clean",
+  "amrnb_12k2 (mild control)",
+  "amrnb_4k75",
+  "g711u_loss10",
+  "opus_nb_8k"
+ ],
+ "intervention": "subtract v(17) fitted on the original fit half (channel-supervised, both classes); codec-specific for the three damaging stages, the mean of the three for the mild control and clean audio; nothing is refitted or tuned on these data",
+ "metrics": "EER; real callers rejected and fakes accepted at the clean development threshold; minDCF and DCF_thr (ASVspoof 5 costs); 95% speaker-clustered bootstrap (1,000) for levels and paired differences; per-attack EER",
+ "comparisons": "uncorrected A, corrected A, checkpoint B and XLSR-SLS on identical trials"
+}

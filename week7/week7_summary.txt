@@ -1,0 +1,269 @@
+WEEK 7 SUMMARY
+{
+ "fixed_on": "2026-11-27 (written to disk before any W7-2 score is computed)",
+ "purpose": "confirmatory test of layer-17 drift removal on ASVspoof 2019 LA utterances never inspected before",
+ "speakers": "the 34 test-half speakers of speaker_split(seed 1234); no fit-half speaker",
+ "utterances": "eval utterances of those speakers that are not in subset.csv (the 1,988 utterances used so far)",
+ "sample": "1500 genuine + up to 115 spoofed per attack A07-A19, sampling seed 2027",
+ "stages": [
+  "clean",
+  "amrnb_12k2 (mild control)",
+  "amrnb_4k75",
+  "g711u_loss10",
+  "opus_nb_8k"
+ ],
+ "intervention": "subtract v(17) fitted on the original fit half (channel-supervised, both classes); codec-specific for the three damaging stages, the mean of the three for the mild control and clean audio; nothing is refitted or tuned on these data",
+ "metrics": "EER; real callers rejected and fakes accepted at the clean development threshold; minDCF and DCF_thr (ASVspoof 5 costs); 95% speaker-clustered bootstrap (1,000) for levels and paired differences; per-attack EER",
+ "comparisons": "uncorrected A, corrected A, checkpoint B and XLSR-SLS on identical trials"
+}
+
+METRIC AUDIT:
+                                case  eer_ours  eer_sklearn  abs_diff
+0             synthetic, overlapping    0.3170       0.3175    0.0005
+1               synthetic, separated    0.0000       0.0000    0.0000
+2         A, clean, 1,988 utterances    0.0000       0.0000    0.0000
+3  A, g711u_loss10, 1,988 utterances    0.1041       0.1041    0.0000
+4    A, amrnb_4k75, 1,988 utterances    0.2792       0.2792    0.0000
+5    A, opus_nb_8k, 1,988 utterances    0.0589       0.0589    0.0000
+{
+ "threshold_A": -3.4372589588165283,
+ "max_dev_spoof_score": -3.4372589588165283,
+ "min_dev_genuine_score": 2.4313533306121826,
+ "dev_spoofs_at_or_above_threshold": 1,
+ "eval_scores_exactly_at_threshold": 0,
+ "orientation_clean_genuine_mean": 4.501635551452637,
+ "orientation_clean_spoof_mean": -3.587836742401123,
+ "input_length": 64600,
+ "models_in_eval_mode": {
+  "A": true,
+  "B": true,
+  "SLS": true
+ }
+}
+
+FRESH SET: 1500 genuine, 1495 spoofed, 34 speakers
+
+CONFIRMATORY RESULTS (fresh utterances, frozen L17 drift from the original fit half):
+           stage       system     eer  real_rejected  fakes_accepted  min_dcf  dcf_thr  eer_lo  eer_hi   d_eer    d_lo    d_hi
+0          clean            A  0.0020         0.0000          0.0408   0.0040   0.0408  0.0007  0.0045     NaN     NaN     NaN
+1          clean  A_corrected  0.0240         0.0000          0.2381   0.0281   0.2381  0.0155  0.0344  0.0220  0.0144  0.0310
+2          clean            B  0.0020         0.0007          0.0328   0.0033   0.0340  0.0006  0.0035     NaN     NaN     NaN
+3          clean          SLS  0.0020         0.0000          0.0375   0.0033   0.0375  0.0006  0.0042     NaN     NaN     NaN
+4     amrnb_12k2            A  0.0134         0.0193          0.0080   0.0336   0.0448  0.0080  0.0174     NaN     NaN     NaN
+5     amrnb_12k2  A_corrected  0.0080         0.0000          0.1104   0.0172   0.1104  0.0041  0.0110 -0.0053 -0.0085 -0.0024
+6     amrnb_12k2            B  0.0020         0.0007          0.0047   0.0033   0.0059  0.0006  0.0044     NaN     NaN     NaN
+7     amrnb_12k2          SLS  0.0080         0.0100          0.0060   0.0187   0.0250  0.0042  0.0124     NaN     NaN     NaN
+8   g711u_loss10            A  0.1065         0.6093          0.0040   0.3022   1.1617  0.0837  0.1279     NaN     NaN     NaN
+9   g711u_loss10  A_corrected  0.0361         0.0333          0.0388   0.0970   0.1021  0.0266  0.0461 -0.0705 -0.0869 -0.0542
+10  g711u_loss10            B  0.0087         0.0433          0.0027   0.0188   0.0850  0.0042  0.0128     NaN     NaN     NaN
+11  g711u_loss10          SLS  0.0741         0.6527          0.0047   0.1604   1.2447  0.0604  0.0886     NaN     NaN     NaN
+12    amrnb_4k75            A  0.2508         0.8860          0.0047   0.6923   1.6881  0.2154  0.2956     NaN     NaN     NaN
+13    amrnb_4k75  A_corrected  0.0995         0.0940          0.1037   0.2684   0.2823  0.0830  0.1228 -0.1513 -0.1775 -0.1238
+14    amrnb_4k75            B  0.0628         0.3587          0.0020   0.1799   0.6835  0.0445  0.0823     NaN     NaN     NaN
+15    amrnb_4k75          SLS  0.1145         0.8580          0.0047   0.2128   1.6349  0.0956  0.1313     NaN     NaN     NaN
+16    opus_nb_8k            A  0.0654         0.2600          0.0047   0.1785   0.4987  0.0470  0.0847     NaN     NaN     NaN
+17    opus_nb_8k  A_corrected  0.0260         0.0320          0.0221   0.0706   0.0829  0.0164  0.0374 -0.0394 -0.0521 -0.0276
+18    opus_nb_8k            B  0.0040         0.0040          0.0033   0.0085   0.0109  0.0014  0.0063     NaN     NaN     NaN
+19    opus_nb_8k          SLS  0.0367         0.2280          0.0047   0.1026   0.4379  0.0250  0.0523     NaN     NaN     NaN
+
+PER-ATTACK EER (fresh):
+           stage attack       A  A_corrected       B     SLS
+0          clean    A07  0.0000       0.0000  0.0000  0.0000
+1          clean    A08  0.0000       0.0000  0.0003  0.0000
+2          clean    A09  0.0000       0.0000  0.0000  0.0000
+3          clean    A10  0.0010       0.1566  0.0013  0.0000
+4          clean    A11  0.0080       0.0694  0.0003  0.0070
+5          clean    A12  0.0000       0.0000  0.0003  0.0000
+6          clean    A13  0.0000       0.0000  0.0000  0.0000
+7          clean    A14  0.0000       0.0000  0.0000  0.0000
+8          clean    A15  0.0000       0.0000  0.0003  0.0000
+9          clean    A16  0.0000       0.0000  0.0000  0.0000
+10         clean    A17  0.0174       0.0260  0.0087  0.0174
+11         clean    A18  0.0000       0.0087  0.0003  0.0000
+12         clean    A19  0.0000       0.0174  0.0003  0.0000
+13    amrnb_12k2    A07  0.0017       0.0000  0.0003  0.0000
+14    amrnb_12k2    A08  0.0080       0.0000  0.0003  0.0000
+15    amrnb_12k2    A09  0.0007       0.0000  0.0000  0.0000
+16    amrnb_12k2    A10  0.0260       0.0260  0.0087  0.0174
+17    amrnb_12k2    A11  0.0167       0.0070  0.0003  0.0073
+18    amrnb_12k2    A12  0.0073       0.0003  0.0003  0.0003
+19    amrnb_12k2    A13  0.0003       0.0000  0.0000  0.0000
+20    amrnb_12k2    A14  0.0067       0.0000  0.0000  0.0000
+21    amrnb_12k2    A15  0.0073       0.0003  0.0003  0.0000
+22    amrnb_12k2    A16  0.0083       0.0000  0.0003  0.0000
+23    amrnb_12k2    A17  0.0260       0.0260  0.0087  0.0260
+24    amrnb_12k2    A18  0.0174       0.0087  0.0003  0.0093
+25    amrnb_12k2    A19  0.0174       0.0090  0.0003  0.0174
+26  g711u_loss10    A07  0.0798       0.0174  0.0017  0.0003
+27  g711u_loss10    A08  0.0588       0.0174  0.0017  0.0003
+28  g711u_loss10    A09  0.0955       0.0174  0.0010  0.0003
+29  g711u_loss10    A10  0.1823       0.0454  0.0093  0.0174
+30  g711u_loss10    A11  0.1229       0.0367  0.0020  0.0174
+31  g711u_loss10    A12  0.0861       0.0174  0.0017  0.0003
+32  g711u_loss10    A13  0.0781       0.0174  0.0013  0.0000
+33  g711u_loss10    A14  0.0761       0.0174  0.0010  0.0003
+34  g711u_loss10    A15  0.0868       0.0240  0.0017  0.0003
+35  g711u_loss10    A16  0.1132       0.0250  0.0017  0.0087
+36  g711u_loss10    A17  0.1306       0.0694  0.0260  0.1833
+37  g711u_loss10    A18  0.1219       0.0775  0.0067  0.1122
+38  g711u_loss10    A19  0.1055       0.0608  0.0174  0.1646
+39    amrnb_4k75    A07  0.2090       0.0454  0.0521  0.0003
+40    amrnb_4k75    A08  0.1730       0.0434  0.0521  0.0174
+41    amrnb_4k75    A09  0.2591       0.0434  0.0431  0.0007
+42    amrnb_4k75    A10  0.3045       0.0861  0.0935  0.0090
+43    amrnb_4k75    A11  0.2347       0.0694  0.0788  0.0093
+44    amrnb_4k75    A12  0.1893       0.0434  0.0608  0.0080
+45    amrnb_4k75    A13  0.1907       0.0434  0.0277  0.0000
+46    amrnb_4k75    A14  0.1736       0.0434  0.0788  0.0003
+47    amrnb_4k75    A15  0.2174       0.0367  0.0608  0.0087
+48    amrnb_4k75    A16  0.2521       0.0518  0.0451  0.0080
+49    amrnb_4k75    A17  0.3980       0.2531  0.0781  0.3038
+50    amrnb_4k75    A18  0.3392       0.1740  0.0521  0.1820
+51    amrnb_4k75    A19  0.3045       0.1653  0.0521  0.2771
+52    opus_nb_8k    A07  0.0347       0.0100  0.0000  0.0003
+53    opus_nb_8k    A08  0.0260       0.0073  0.0000  0.0067
+54    opus_nb_8k    A09  0.0521       0.0093  0.0000  0.0000
+55    opus_nb_8k    A10  0.1219       0.0521  0.0087  0.0174
+56    opus_nb_8k    A11  0.0704       0.0254  0.0007  0.0087
+57    opus_nb_8k    A12  0.0437       0.0174  0.0003  0.0087
+58    opus_nb_8k    A13  0.0347       0.0090  0.0000  0.0000
+59    opus_nb_8k    A14  0.0347       0.0090  0.0000  0.0000
+60    opus_nb_8k    A15  0.0511       0.0160  0.0000  0.0017
+61    opus_nb_8k    A16  0.0434       0.0090  0.0000  0.0003
+62    opus_nb_8k    A17  0.1035       0.0621  0.0174  0.1045
+63    opus_nb_8k    A18  0.0781       0.0434  0.0000  0.0511
+64    opus_nb_8k    A19  0.0514       0.0254  0.0017  0.0608
+
+EQUAL TUNING, layer choice on the fit half:
+                method  chosen_layer  fit_eer_L5  fit_eer_L11  fit_eer_L17  fit_eer_L23
+0    paired mean shift            17      0.0881       0.0753       0.0517       0.1966
+1  unpaired mean shift            17      0.0881       0.0771       0.0555       0.1979
+2                CORAL             5      0.0668       0.0809       0.0721       0.3807
+3           NAP rank 4             5      0.0414       0.1427       0.0630       0.5287
+4                LEACE            17      0.1126       0.1035       0.1019       0.2258
+
+EQUAL TUNING, test half:
+           stage                                  method  layer     eer  real_rejected  fakes_accepted  min_dcf  dcf_thr  d_eer_vs_paired    d_lo    d_hi
+0   g711u_loss10                       paired mean shift   17.0  0.0260         0.0263          0.0256   0.0755   0.0756              NaN     NaN     NaN
+1     amrnb_4k75                       paired mean shift   17.0  0.1092         0.0877          0.1301   0.2886   0.2967              NaN     NaN     NaN
+2     opus_nb_8k                       paired mean shift   17.0  0.0281         0.0307          0.0235   0.0717   0.0818              NaN     NaN     NaN
+3   g711u_loss10                     unpaired mean shift   17.0  0.0281         0.0285          0.0277   0.0798   0.0819           0.0022  0.0000  0.0071
+4     amrnb_4k75                     unpaired mean shift   17.0  0.1114         0.1053          0.1237   0.2990   0.3237           0.0022 -0.0050  0.0094
+5     opus_nb_8k                     unpaired mean shift   17.0  0.0281         0.0351          0.0235   0.0738   0.0901           0.0000 -0.0022  0.0047
+6   g711u_loss10                                   CORAL    5.0  0.0324         0.0833          0.0000   0.0903   0.1583           0.0065 -0.0067  0.0183
+7     amrnb_4k75                                   CORAL    5.0  0.1535         0.4211          0.0277   0.4145   0.8277           0.0443  0.0115  0.0747
+8     opus_nb_8k                                   CORAL    5.0  0.0216         0.0351          0.0107   0.0527   0.0773          -0.0065 -0.0192  0.0045
+9   g711u_loss10                              NAP rank 4    5.0  0.0173         0.0000          0.3198   0.0339   0.3198          -0.0087 -0.0260  0.0043
+10    amrnb_4k75                              NAP rank 4    5.0  0.0962         0.0110          0.2367   0.1928   0.2575          -0.0130 -0.0357  0.0056
+11    opus_nb_8k                              NAP rank 4    5.0  0.0108         0.0000          0.2281   0.0271   0.2281          -0.0173 -0.0278 -0.0084
+12  g711u_loss10                                   LEACE   17.0  0.0530         0.1930          0.0000   0.1471   0.3667           0.0270  0.0164  0.0387
+13    amrnb_4k75                                   LEACE   17.0  0.1935         0.4956          0.0362   0.5028   0.9779           0.0843  0.0570  0.1043
+14    opus_nb_8k                                   LEACE   17.0  0.0508         0.1250          0.0000   0.1388   0.2375           0.0227  0.0099  0.0341
+15  g711u_loss10                           no correction    NaN  0.1070         0.5987          0.0000   0.2963   1.1375           0.0811  0.0653  0.0953
+16  g711u_loss10       recalibrated threshold (labelled)    NaN  0.1070         0.1162          0.1023   0.2963   0.3232              NaN     NaN     NaN
+17  g711u_loss10  checkpoint B (training-time reference)    NaN  0.0043         0.0461          0.0000   0.0105   0.0875          -0.0216 -0.0375 -0.0086
+18    amrnb_4k75                           no correction    NaN  0.2562         0.8706          0.0043   0.6849   1.6584           0.1470  0.1150  0.1734
+19    amrnb_4k75       recalibrated threshold (labelled)    NaN  0.2562         0.2566          0.2601   0.6849   0.7476              NaN     NaN     NaN
+20    amrnb_4k75  checkpoint B (training-time reference)    NaN  0.0768         0.3860          0.0000   0.2115   0.7333          -0.0324 -0.0647 -0.0038
+21    opus_nb_8k                           no correction    NaN  0.0638         0.3092          0.0000   0.1807   0.5875           0.0357  0.0203  0.0533
+22    opus_nb_8k       recalibrated threshold (labelled)    NaN  0.0638         0.0921          0.0341   0.1807   0.2091              NaN     NaN     NaN
+23    opus_nb_8k  checkpoint B (training-time reference)    NaN  0.0022         0.0088          0.0021   0.0063   0.0188          -0.0260 -0.0350 -0.0139
+
+GATE WITH ONE CODEC-AGNOSTIC DRIFT (test half):
+              channel                                          policy  flagged     eer  real_rejected  fakes_accepted  min_dcf  dcf_thr
+0               clean                                   never correct   0.0022  0.0000         0.0000          0.0448   0.0000   0.0448
+1               clean                     gated, codec-agnostic drift   0.0022  0.0000         0.0000          0.0448   0.0000   0.0448
+2               clean            always correct, codec-agnostic drift   0.0022  0.0108         0.0000          0.2388   0.0128   0.2388
+3         nb_resample                                   never correct   1.0000  0.0000         0.0000          0.0256   0.0000   0.0256
+4         nb_resample                     gated, codec-agnostic drift   1.0000  0.0151         0.0000          0.2303   0.0192   0.2303
+5         nb_resample            always correct, codec-agnostic drift   1.0000  0.0151         0.0000          0.2303   0.0192   0.2303
+6   bandpass_300_3400                                   never correct   0.9989  0.0303         0.0175          0.0362   0.0654   0.0696
+7   bandpass_300_3400                     gated, codec-agnostic drift   0.9989  0.0303         0.0000          0.2751   0.0425   0.2751
+8   bandpass_300_3400            always correct, codec-agnostic drift   0.9989  0.0303         0.0000          0.2751   0.0425   0.2751
+9               g711u                                   never correct   1.0000  0.0022         0.0000          0.0256   0.0021   0.0256
+10              g711u                     gated, codec-agnostic drift   1.0000  0.0087         0.0000          0.2281   0.0169   0.2281
+11              g711u            always correct, codec-agnostic drift   1.0000  0.0087         0.0000          0.2281   0.0169   0.2281
+12         amrnb_12k2                                   never correct   0.9989  0.0087         0.0154          0.0021   0.0232   0.0313
+13         amrnb_12k2                     gated, codec-agnostic drift   0.9989  0.0022         0.0000          0.1215   0.0043   0.1215
+14         amrnb_12k2            always correct, codec-agnostic drift   0.9989  0.0022         0.0000          0.1215   0.0043   0.1215
+15             gsm_fr                                   never correct   1.0000  0.0368         0.1732          0.0000   0.0964   0.3292
+16             gsm_fr                     gated, codec-agnostic drift   1.0000  0.0130         0.0000          0.0618   0.0234   0.0618
+17             gsm_fr            always correct, codec-agnostic drift   1.0000  0.0130         0.0000          0.0618   0.0234   0.0618
+18        amrwb_23k85                                   never correct   0.0097  0.0065         0.0088          0.0021   0.0146   0.0188
+19        amrwb_23k85                     gated, codec-agnostic drift   0.0097  0.0065         0.0088          0.0043   0.0168   0.0209
+20        amrwb_23k85            always correct, codec-agnostic drift   0.0097  0.0065         0.0000          0.1386   0.0125   0.1386
+21        opus_wb_16k                                   never correct   0.0065  0.0000         0.0000          0.0000   0.0000   0.0000
+22        opus_wb_16k                     gated, codec-agnostic drift   0.0065  0.0000         0.0000          0.0000   0.0000   0.0000
+23        opus_wb_16k            always correct, codec-agnostic drift   0.0065  0.0022         0.0000          0.1429   0.0021   0.1429
+24          amrnb_5k9                                   never correct   0.9989  0.1643         0.6447          0.0021   0.4504   1.2271
+25          amrnb_5k9                     gated, codec-agnostic drift   0.9989  0.0595         0.0636          0.0597   0.1604   0.1805
+26          amrnb_5k9            always correct, codec-agnostic drift   0.9989  0.0595         0.0636          0.0597   0.1604   0.1805
+27   opus_nb_8k_plc10                                   never correct   0.9989  0.2043         0.7851          0.0000   0.5553   1.4917
+28   opus_nb_8k_plc10                     gated, codec-agnostic drift   0.9989  0.0811         0.1469          0.0448   0.2279   0.3239
+29   opus_nb_8k_plc10            always correct, codec-agnostic drift   0.9989  0.0811         0.1469          0.0448   0.2279   0.3239
+30       g711u_loss10                                   never correct   1.0000  0.1070         0.5987          0.0000   0.2963   1.1375
+31       g711u_loss10                     gated, codec-agnostic drift   1.0000  0.0260         0.0197          0.0426   0.0673   0.0801
+32       g711u_loss10            always correct, codec-agnostic drift   1.0000  0.0260         0.0197          0.0426   0.0673   0.0801
+33       g711u_loss10  oracle: codec-specific drift (diagnostic only)   1.0000  0.0260         0.0263          0.0256   0.0755   0.0756
+34         amrnb_4k75                                   never correct   0.9989  0.2562         0.8706          0.0043   0.6849   1.6584
+35         amrnb_4k75                     gated, codec-agnostic drift   0.9989  0.1276         0.2500          0.0704   0.3535   0.5454
+36         amrnb_4k75            always correct, codec-agnostic drift   0.9989  0.1276         0.2500          0.0704   0.3535   0.5454
+37         amrnb_4k75  oracle: codec-specific drift (diagnostic only)   0.9989  0.1092         0.0877          0.1301   0.2886   0.2967
+38         opus_nb_8k                                   never correct   0.9989  0.0638         0.3092          0.0000   0.1807   0.5875
+39         opus_nb_8k                     gated, codec-agnostic drift   0.9989  0.0195         0.0066          0.0533   0.0505   0.0658
+40         opus_nb_8k            always correct, codec-agnostic drift   0.9989  0.0195         0.0066          0.0533   0.0505   0.0658
+41         opus_nb_8k  oracle: codec-specific drift (diagnostic only)   0.9989  0.0281         0.0307          0.0235   0.0717   0.0818
+
+CONTROLLED PACKET LOSS (same libopus encoder/decoder; mean and SD over seeds):
+                actual_loss             eer         real_rejected         fakes_accepted        
+                       mean     std    mean     std          mean     std           mean     std
+model loss_rate                                                                                 
+A     0.00           0.0000     NaN  0.0486     NaN        0.2281     NaN         0.0000     NaN
+      0.05           0.0499  0.0008  0.1712  0.0096        0.6991  0.0183         0.0004  0.0010
+      0.10           0.0998  0.0007  0.2476  0.0076        0.8693  0.0100         0.0009  0.0012
+      0.20           0.2003  0.0008  0.3191  0.0066        0.9544  0.0099         0.0004  0.0010
+SLS   0.00           0.0000     NaN  0.0303     NaN        0.1689     NaN         0.0000     NaN
+      0.05           0.0499  0.0008  0.0954  0.0039        0.6702  0.0188         0.0000  0.0000
+      0.10           0.0998  0.0007  0.1241  0.0029        0.8465  0.0078         0.0000  0.0000
+      0.20           0.2003  0.0008  0.1535  0.0043        0.9496  0.0068         0.0009  0.0012
+
+per seed:
+   model  loss_rate  seed  actual_loss     eer  real_rejected  fakes_accepted  min_dcf  dcf_thr
+0      A       0.00     0       0.0000  0.0486         0.2281          0.0000   0.1321   0.4333
+1    SLS       0.00     0       0.0000  0.0303         0.1689          0.0000   0.0674   0.3208
+2      A       0.05     1       0.0497  0.1643         0.6711          0.0000   0.4703   1.2750
+3    SLS       0.05     1       0.0497  0.0919         0.6535          0.0000   0.2062   1.2417
+4      A       0.05     2       0.0507  0.1665         0.7193          0.0000   0.4666   1.3667
+5    SLS       0.05     2       0.0507  0.1005         0.6908          0.0000   0.2040   1.3125
+6      A       0.05     3       0.0488  0.1816         0.6952          0.0021   0.4862   1.3230
+7    SLS       0.05     3       0.0488  0.0941         0.6491          0.0000   0.2032   1.2333
+8      A       0.05     4       0.0495  0.1816         0.7105          0.0000   0.4803   1.3500
+9    SLS       0.05     4       0.0495  0.0919         0.6864          0.0000   0.2014   1.3042
+10     A       0.05     5       0.0506  0.1622         0.6996          0.0000   0.4644   1.3292
+11   SLS       0.05     5       0.0506  0.0984         0.6711          0.0000   0.1977   1.2750
+12     A       0.10     1       0.0997  0.2476         0.8596          0.0021   0.6517   1.6355
+13   SLS       0.10     1       0.0997  0.1254         0.8509          0.0000   0.2362   1.6167
+14     A       0.10     2       0.1003  0.2562         0.8618          0.0000   0.6687   1.6375
+15   SLS       0.10     2       0.1003  0.1189         0.8421          0.0000   0.2378   1.6000
+16     A       0.10     3       0.0986  0.2541         0.8838          0.0021   0.6589   1.6813
+17   SLS       0.10     3       0.0986  0.1254         0.8487          0.0000   0.2354   1.6125
+18     A       0.10     4       0.1003  0.2411         0.8750          0.0000   0.6593   1.6625
+19   SLS       0.10     4       0.1003  0.1254         0.8553          0.0000   0.2383   1.6250
+20     A       0.10     5       0.0999  0.2389         0.8662          0.0000   0.6423   1.6458
+21   SLS       0.10     5       0.0999  0.1254         0.8355          0.0000   0.2272   1.5875
+22     A       0.20     1       0.1991  0.3135         0.9408          0.0000   0.8473   1.7875
+23   SLS       0.20     1       0.1991  0.1492         0.9474          0.0021   0.2614   1.8021
+24     A       0.20     2       0.2013  0.3200         0.9627          0.0000   0.8580   1.8292
+25   SLS       0.20     2       0.2013  0.1557         0.9474          0.0000   0.2556   1.8000
+26     A       0.20     3       0.1999  0.3114         0.9627          0.0021   0.8370   1.8313
+27   SLS       0.20     3       0.1999  0.1600         0.9539          0.0000   0.2616   1.8125
+28     A       0.20     4       0.2002  0.3243         0.9583          0.0000   0.8671   1.8208
+29   SLS       0.20     4       0.2002  0.1514         0.9583          0.0000   0.2579   1.8208
+30     A       0.20     5       0.2009  0.3265         0.9474          0.0000   0.9031   1.8000
+31   SLS       0.20     5       0.2009  0.1514         0.9408          0.0021   0.2536   1.7896
+
+RTCFAKE MARGIN-AWARE PREDICTION (genuine pairs):
+  model    n  rej_offline  rej_online_measured  pred_margin_aware_per_utt  pred_margin_aware_mean_drift  measured_mean_score_drop  predicted_mean_score_drop  spearman_pred_vs_measured_drop  drift_mean
+0     A  479       0.2067               0.3194                     0.3340                        0.3716                    1.5290                     0.8629                          0.5921      0.0905
+1     B  479       0.1608               0.3236                     0.2192                        0.1962                    1.9837                     0.8656                          0.6599      0.1151
+2   SLS  479       0.0835               0.1754                     0.1169                        0.0919                    1.7260                     0.9905                          0.8109      0.0833
