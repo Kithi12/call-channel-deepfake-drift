@@ -1,0 +1,127 @@
+model,effect,cls,layer,proj,cos
+A,room + microphone (no-call vs original),genuine,3,0.035512734204530716,0.02837715670466423
+A,room + microphone (no-call vs original),genuine,5,0.1431405246257782,0.14202676713466644
+A,room + microphone (no-call vs original),genuine,7,0.26618582010269165,0.4432567059993744
+A,room + microphone (no-call vs original),genuine,11,0.280616819858551,0.5723069310188293
+A,room + microphone (no-call vs original),genuine,17,0.36281532049179077,0.7637977600097656
+A,room + microphone (no-call vs original),genuine,21,0.8636214733123779,0.9859226942062378
+A,room + microphone (no-call vs original),genuine,23,0.8083513379096985,0.9717351794242859
+A,room + microphone (no-call vs original),spoof,3,-0.25325748324394226,-0.19247177243232727
+A,room + microphone (no-call vs original),spoof,5,-0.23814022541046143,-0.22724169492721558
+A,room + microphone (no-call vs original),spoof,7,-0.3069489300251007,-0.48462438583374023
+A,room + microphone (no-call vs original),spoof,11,-0.2847571074962616,-0.5722864270210266
+A,room + microphone (no-call vs original),spoof,17,-0.20322349667549133,-0.5657311677932739
+A,room + microphone (no-call vs original),spoof,21,0.04098120704293251,0.40556108951568604
+A,room + microphone (no-call vs original),spoof,23,0.017344683408737183,0.1747378408908844
+A,WhatsApp call (call vs no-call),genuine,3,0.014797650277614594,0.012321666814386845
+A,WhatsApp call (call vs no-call),genuine,5,0.04447169229388237,0.04608681797981262
+A,WhatsApp call (call vs no-call),genuine,7,0.1352931410074234,0.2405843734741211
+A,WhatsApp call (call vs no-call),genuine,11,0.20059844851493835,0.4050489664077759
+A,WhatsApp call (call vs no-call),genuine,17,0.17705798149108887,0.511713981628418
+A,WhatsApp call (call vs no-call),genuine,21,0.15929138660430908,0.8467170596122742
+A,WhatsApp call (call vs no-call),genuine,23,0.1045016199350357,0.5794340372085571
+A,WhatsApp call (call vs no-call),spoof,3,0.26392844319343567,0.27087631821632385
+A,WhatsApp call (call vs no-call),spoof,5,0.2477416843175888,0.31989607214927673
+A,WhatsApp call (call vs no-call),spoof,7,0.27949097752571106,0.5573423504829407
+A,WhatsApp call (call vs no-call),spoof,11,0.26032504439353943,0.6302926540374756
+A,WhatsApp call (call vs no-call),spoof,17,0.21980059146881104,0.6823909282684326
+A,WhatsApp call (call vs no-call),spoof,21,0.057277992367744446,0.6968717575073242
+A,WhatsApp call (call vs no-call),spoof,23,0.045492224395275116,0.6131588220596313
+A,total (call vs original),genuine,3,0.05031035467982292,0.056547217071056366
+A,total (call vs original),genuine,5,0.18761223554611206,0.24414944648742676
+A,total (call vs original),genuine,7,0.40147891640663147,0.6506813168525696
+A,total (call vs original),genuine,11,0.48121529817581177,0.7670115232467651
+A,total (call vs original),genuine,17,0.5398733615875244,0.8715001940727234
+A,total (call vs original),genuine,21,1.022912859916687,0.9850313663482666
+A,total (call vs original),genuine,23,0.912852942943573,0.9508752822875977
+A,total (call vs original),spoof,3,0.010670887306332588,0.011416428722441196
+A,total (call vs original),spoof,5,0.009601396508514881,0.013391714543104172
+A,total (call vs original),spoof,7,-0.02745794877409935,-0.0701143816113472
+A,total (call vs original),spoof,11,-0.024432038888335228,-0.09033862501382828
+A,total (call vs original),spoof,17,0.016577115282416344,0.07865537703037262
+A,total (call vs original),spoof,21,0.09825919568538666,0.778215765953064
+A,total (call vs original),spoof,23,0.0628369078040123,0.5355427861213684
+B,room + microphone (no-call vs original),genuine,3,0.08203289657831192,0.08222532272338867
+B,room + microphone (no-call vs original),genuine,5,0.132905051112175,0.15553149580955505
+B,room + microphone (no-call vs original),genuine,7,0.1749679297208786,0.28985437750816345
+B,room + microphone (no-call vs original),genuine,11,0.1904454380273819,0.4139443039894104
+B,room + microphone (no-call vs original),genuine,17,0.17737305164337158,0.40597400069236755
+B,room + microphone (no-call vs original),genuine,21,0.02028840221464634,0.2756306231021881
+B,room + microphone (no-call vs original),genuine,23,0.026438498869538307,0.3124881088733673
+B,room + microphone (no-call vs original),spoof,3,-0.1278401017189026,-0.11993099749088287
+B,room + microphone (no-call vs original),spoof,5,-0.1275474727153778,-0.14239682257175446
+B,room + microphone (no-call vs original),spoof,7,-0.2199159413576126,-0.33458763360977173
+B,room + microphone (no-call vs original),spoof,11,-0.1920170783996582,-0.3894665539264679
+B,room + microphone (no-call vs original),spoof,17,-0.25247517228126526,-0.4931830167770386
+B,room + microphone (no-call vs original),spoof,21,-0.12999498844146729,-0.9077510237693787
+B,room + microphone (no-call vs original),spoof,23,-0.1142616793513298,-0.8401749730110168
+B,WhatsApp call (call vs no-call),genuine,3,-0.0020709331147372723,-0.0022031657863408327
+B,WhatsApp call (call vs no-call),genuine,5,0.06783869862556458,0.08412200212478638
+B,WhatsApp call (call vs no-call),genuine,7,0.19025883078575134,0.3041626513004303
+B,WhatsApp call (call vs no-call),genuine,11,0.2561532258987427,0.4512593448162079
+B,WhatsApp call (call vs no-call),genuine,17,0.3229460120201111,0.6096066832542419
+B,WhatsApp call (call vs no-call),genuine,21,0.1598661094903946,0.870489776134491
+B,WhatsApp call (call vs no-call),genuine,23,0.1732283979654312,0.8565564751625061
+B,WhatsApp call (call vs no-call),spoof,3,0.2054997831583023,0.24878770112991333
+B,WhatsApp call (call vs no-call),spoof,5,0.23324833810329437,0.3231193721294403
+B,WhatsApp call (call vs no-call),spoof,7,0.38767218589782715,0.5693535208702087
+B,WhatsApp call (call vs no-call),spoof,11,0.35003915429115295,0.6108548641204834
+B,WhatsApp call (call vs no-call),spoof,17,0.4839392602443695,0.7350814938545227
+B,WhatsApp call (call vs no-call),spoof,21,0.24984915554523468,0.9549326300621033
+B,WhatsApp call (call vs no-call),spoof,23,0.22005508840084076,0.8762167096138
+B,total (call vs original),genuine,3,0.07996196299791336,0.1020723506808281
+B,total (call vs original),genuine,5,0.20074374973773956,0.28837788105010986
+B,total (call vs original),genuine,7,0.36522674560546875,0.5799286961555481
+B,total (call vs original),genuine,11,0.446598619222641,0.6913027167320251
+B,total (call vs original),genuine,17,0.5003190040588379,0.7532268166542053
+B,total (call vs original),genuine,21,0.18015451729297638,0.8571270108222961
+B,total (call vs original),genuine,23,0.19966688752174377,0.8258826732635498
+B,total (call vs original),spoof,3,0.07765966653823853,0.09094811975955963
+B,total (call vs original),spoof,5,0.10570083558559418,0.14969904720783234
+B,total (call vs original),spoof,7,0.16775619983673096,0.3265819847583771
+B,total (call vs original),spoof,11,0.15802210569381714,0.39796820282936096
+B,total (call vs original),spoof,17,0.23146410286426544,0.5425658822059631
+B,total (call vs original),spoof,21,0.11985417455434799,0.903852641582489
+B,total (call vs original),spoof,23,0.10579343140125275,0.8170219659805298
+SLS,room + microphone (no-call vs original),genuine,3,0.027998577803373337,0.02211182750761509
+SLS,room + microphone (no-call vs original),genuine,5,0.1147705465555191,0.11735989153385162
+SLS,room + microphone (no-call vs original),genuine,7,0.1763128638267517,0.33922937512397766
+SLS,room + microphone (no-call vs original),genuine,11,0.18889887630939484,0.47006434202194214
+SLS,room + microphone (no-call vs original),genuine,17,0.13330933451652527,0.4183053970336914
+SLS,room + microphone (no-call vs original),genuine,21,0.2888152301311493,0.9546579718589783
+SLS,room + microphone (no-call vs original),genuine,23,0.2766673266887665,0.8963956832885742
+SLS,room + microphone (no-call vs original),spoof,3,-0.2697758376598358,-0.2016289085149765
+SLS,room + microphone (no-call vs original),spoof,5,-0.27411219477653503,-0.26502031087875366
+SLS,room + microphone (no-call vs original),spoof,7,-0.3878903388977051,-0.5963327288627625
+SLS,room + microphone (no-call vs original),spoof,11,-0.3691835105419159,-0.688001275062561
+SLS,room + microphone (no-call vs original),spoof,17,-0.3565073013305664,-0.7570065855979919
+SLS,room + microphone (no-call vs original),spoof,21,-0.08821456134319305,-0.7432817220687866
+SLS,room + microphone (no-call vs original),spoof,23,-0.10056610405445099,-0.6802825927734375
+SLS,WhatsApp call (call vs no-call),genuine,3,-0.005746776238083839,-0.004634158685803413
+SLS,WhatsApp call (call vs no-call),genuine,5,0.0403466634452343,0.04102350026369095
+SLS,WhatsApp call (call vs no-call),genuine,7,0.09933172166347504,0.18862009048461914
+SLS,WhatsApp call (call vs no-call),genuine,11,0.15105317533016205,0.3406951427459717
+SLS,WhatsApp call (call vs no-call),genuine,17,0.18285858631134033,0.5219393372535706
+SLS,WhatsApp call (call vs no-call),genuine,21,0.35598328709602356,0.9779968857765198
+SLS,WhatsApp call (call vs no-call),genuine,23,0.3628690242767334,0.9758314490318298
+SLS,WhatsApp call (call vs no-call),spoof,3,0.25690722465515137,0.2554303705692291
+SLS,WhatsApp call (call vs no-call),spoof,5,0.24971529841423035,0.3176605701446533
+SLS,WhatsApp call (call vs no-call),spoof,7,0.3052768111228943,0.599254846572876
+SLS,WhatsApp call (call vs no-call),spoof,11,0.28987544775009155,0.6750547289848328
+SLS,WhatsApp call (call vs no-call),spoof,17,0.3178865313529968,0.7858933806419373
+SLS,WhatsApp call (call vs no-call),spoof,21,0.08193705230951309,0.7971036434173584
+SLS,WhatsApp call (call vs no-call),spoof,23,0.0921417772769928,0.7248917818069458
+SLS,total (call vs original),genuine,3,0.02225179597735405,0.024041136726737022
+SLS,total (call vs original),genuine,5,0.1551172286272049,0.2100939005613327
+SLS,total (call vs original),genuine,7,0.27564460039138794,0.5615731477737427
+SLS,total (call vs original),genuine,11,0.3399520814418793,0.714664101600647
+SLS,total (call vs original),genuine,17,0.316167950630188,0.7572993040084839
+SLS,total (call vs original),genuine,21,0.6447985172271729,0.9916643500328064
+SLS,total (call vs original),genuine,23,0.6395363211631775,0.9858472943305969
+SLS,total (call vs original),spoof,3,-0.012868629768490791,-0.013494464568793774
+SLS,total (call vs original),spoof,5,-0.02439686469733715,-0.035261671990156174
+SLS,total (call vs original),spoof,7,-0.08261355012655258,-0.22656136751174927
+SLS,total (call vs original),spoof,11,-0.07930807769298553,-0.3042580783367157
+SLS,total (call vs original),spoof,17,-0.03862081095576286,-0.19108518958091736
+SLS,total (call vs original),spoof,21,-0.006277506705373526,-0.16834694147109985
+SLS,total (call vs original),spoof,23,-0.008424326777458191,-0.22120170295238495
